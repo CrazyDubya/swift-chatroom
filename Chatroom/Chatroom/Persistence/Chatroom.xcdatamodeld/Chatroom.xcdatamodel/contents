@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22225" systemVersion="23A344" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="UserEntity" representedClassName="UserEntity" syncable="YES">
+        <attribute name="avatarURL" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="displayName" attributeType="String"/>
+        <attribute name="email" attributeType="String"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="lastSeen" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="username" attributeType="String"/>
+        <relationship name="chats" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ChatEntity" inverseName="participants" inverseEntity="ChatEntity"/>
+        <relationship name="sentMessages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MessageEntity" inverseName="sender" inverseEntity="MessageEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="ChatEntity" representedClassName="ChatEntity" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="type" attributeType="String"/>
+        <attribute name="unreadCount" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="lastMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MessageEntity" inverseName="lastMessageForChat" inverseEntity="MessageEntity"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MessageEntity" inverseName="chat" inverseEntity="MessageEntity"/>
+        <relationship name="participants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="chats" inverseEntity="UserEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="MessageEntity" representedClassName="MessageEntity" syncable="YES">
+        <attribute name="content" attributeType="String"/>
+        <attribute name="deliveredAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="isRead" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="mediaURL" optional="YES" attributeType="String"/>
+        <attribute name="readAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="senderName" attributeType="String"/>
+        <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="type" attributeType="String"/>
+        <relationship name="chat" maxCount="1" deletionRule="Nullify" destinationEntity="ChatEntity" inverseName="messages" inverseEntity="ChatEntity"/>
+        <relationship name="lastMessageForChat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ChatEntity" inverseName="lastMessage" inverseEntity="ChatEntity"/>
+        <relationship name="sender" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="sentMessages" inverseEntity="UserEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+</model>
