@@ -10,6 +10,7 @@ import SwiftUI
 struct ChatDetailView: View {
     let chat: Chat
     @StateObject private var chatViewModel = ChatViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
     @State private var messageText = ""
     @FocusState private var isInputFocused: Bool
 
@@ -20,8 +21,11 @@ struct ChatDetailView: View {
                 ScrollView {
                     LazyVStack(spacing: 8) {
                         ForEach(chatViewModel.messages) { message in
-                            MessageRow(message: message)
-                                .id(message.id)
+                            MessageRow(
+                                message: message,
+                                currentUserId: authViewModel.currentUser?.id ?? ""
+                            )
+                            .id(message.id)
                         }
                     }
                     .padding()
@@ -83,5 +87,6 @@ struct ChatDetailView: View {
             createdAt: Date(),
             updatedAt: Date()
         ))
+        .environmentObject(AuthViewModel())
     }
 }

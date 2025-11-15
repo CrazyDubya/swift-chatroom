@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MessageActionSheet: View {
     let message: Message
+    let currentUserId: String
     let onReact: (String) -> Void
     let onReply: () -> Void
     let onForward: () -> Void
@@ -66,7 +67,7 @@ struct MessageActionSheet: View {
                     }
                 )
 
-                if message.senderId == "current_user_id" { // TODO: Check actual user ID
+                if message.senderId == currentUserId {
                     ActionButton(
                         icon: "pencil",
                         title: "Edit",
@@ -133,6 +134,7 @@ struct ActionButton: View {
             timestamp: Date(),
             isRead: false
         ),
+        currentUserId: "1",
         onReact: { _ in },
         onReply: {},
         onForward: {},

@@ -79,7 +79,13 @@ class AuthViewModel: ObservableObject {
     }
 
     private func loadCurrentUser() async {
-        // TODO: Implement fetching current user from API
-        // For now, this is a placeholder
+        do {
+            let user = try await authService.getCurrentUser()
+            currentUser = user
+        } catch {
+            errorMessage = error.localizedDescription
+            isAuthenticated = false
+            currentUser = nil
+        }
     }
 }
