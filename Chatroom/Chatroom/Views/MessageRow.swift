@@ -9,7 +9,11 @@ import SwiftUI
 
 struct MessageRow: View {
     let message: Message
-    @State private var isCurrentUser = true // TODO: Get from auth
+    let currentUserId: String
+
+    private var isCurrentUser: Bool {
+        message.senderId == currentUserId
+    }
 
     var body: some View {
         HStack {
@@ -72,27 +76,33 @@ struct MessageBubble: View {
 
 #Preview {
     VStack(spacing: 16) {
-        MessageRow(message: Message(
-            id: "1",
-            chatId: "1",
-            senderId: "1",
-            senderName: "John Doe",
-            content: "Hello! This is a test message.",
-            type: .text,
-            timestamp: Date(),
-            isRead: false
-        ))
+        MessageRow(
+            message: Message(
+                id: "1",
+                chatId: "1",
+                senderId: "1",
+                senderName: "John Doe",
+                content: "Hello! This is a test message.",
+                type: .text,
+                timestamp: Date(),
+                isRead: false
+            ),
+            currentUserId: "1"
+        )
 
-        MessageRow(message: Message(
-            id: "2",
-            chatId: "1",
-            senderId: "2",
-            senderName: "Jane Smith",
-            content: "This is another message from a different user.",
-            type: .text,
-            timestamp: Date(),
-            isRead: true
-        ))
+        MessageRow(
+            message: Message(
+                id: "2",
+                chatId: "1",
+                senderId: "2",
+                senderName: "Jane Smith",
+                content: "This is another message from a different user.",
+                type: .text,
+                timestamp: Date(),
+                isRead: true
+            ),
+            currentUserId: "1"
+        )
     }
     .padding()
 }

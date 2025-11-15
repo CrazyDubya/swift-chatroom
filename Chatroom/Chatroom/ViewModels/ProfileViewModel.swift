@@ -42,17 +42,7 @@ class ProfileViewModel: ObservableObject {
         errorMessage = nil
 
         do {
-            // TODO: Fetch current user from API
-            // For now, use mock data
-            let user = User(
-                id: "current_user",
-                username: "johndoe",
-                email: "john@example.com",
-                displayName: "John Doe",
-                avatarURL: nil,
-                createdAt: Date(),
-                lastSeen: Date()
-            )
+            let user = try await AuthService.shared.getCurrentUser()
 
             displayName = user.displayName
             username = user.username

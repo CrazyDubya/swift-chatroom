@@ -109,6 +109,30 @@ class AuthService {
         authToken = nil
         refreshToken = nil
     }
+
+    func getCurrentUser() async throws -> User {
+        guard let url = URL(string: baseURL + "/users/me") else {
+            throw APIError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        if let token = authToken {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200 else {
+            throw APIError.serverError("Failed to fetch user")
+        }
+
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode(User.self, from: data)
+    }
 }
 
 // MARK: - Keychain Helper

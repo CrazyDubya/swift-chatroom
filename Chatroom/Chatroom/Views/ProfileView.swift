@@ -221,10 +221,13 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
 
         private func uploadImage(_ image: UIImage) async {
-            // TODO: Implement actual image upload
-            // For now, use a placeholder
-            await MainActor.run {
-                parent.imageURL = "https://via.placeholder.com/150"
+            do {
+                let imageURL = try await MediaUploadService.shared.uploadImage(image, type: .image)
+                await MainActor.run {
+                    parent.imageURL = imageURL
+                }
+            } catch {
+                print("Failed to upload image: \(error.localizedDescription)")
             }
         }
     }
